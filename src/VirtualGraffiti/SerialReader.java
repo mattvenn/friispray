@@ -92,13 +92,16 @@ public class SerialReader implements SerialPortEventListener{
 
 			try
 			{
+				System.out.println( "trying /dev/ttyUSB0" );
 				portId = CommPortIdentifier.getPortIdentifier("/dev/ttyUSB0");
 			}
 			catch( NoSuchPortException e )
 			{
 				try
 				{
-					portId = CommPortIdentifier.getPortIdentifier("/dev/ttyUSB1");
+					String portName = "/dev/tty.usbmodem1d11";
+					System.out.println( "trying " + portName );
+					portId = CommPortIdentifier.getPortIdentifier(portName);
 				}
 				catch( NoSuchPortException e2 )
 				{
@@ -107,9 +110,11 @@ public class SerialReader implements SerialPortEventListener{
 				}
 			}
 
-			serialPort = (SerialPort) portId.open("more meterreader", 5000);
+			System.out.println( "opening port" + portId.getName() );
+			serialPort = (SerialPort) portId.open("virtual graffiti", 5000);
 			int baudRate = baud; // 57600; // 57600bps
 			// Set serial port to 57600bps-8N1..my favourite
+			System.out.println( "setting port params" );
 			serialPort.setSerialPortParams(
 					baudRate,
 					SerialPort.DATABITS_8,
@@ -118,12 +123,15 @@ public class SerialReader implements SerialPortEventListener{
 			//			serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
 			try
 			{
+				
+				System.out.println( "reset arduino..." );
 				serialPort.setDTR(false);
 				Thread.sleep( 100 );
 				serialPort.setDTR(true);
 			}
 			catch( InterruptedException e )
 			{}
+			System.out.println( "assigning io streams" );
 			out = serialPort.getOutputStream();
 			in = serialPort.getInputStream();
 

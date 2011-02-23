@@ -1,28 +1,21 @@
 package VirtualGraffiti;
 
 import java.io.FileInputStream;
-import java.io.IOException;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 import processing.core.PApplet;
 import processing.core.PFont;
-
-/*
- * TODO
- * 
- * + GML
- * + calibration of cans
- * + add all this to github
- * - add camera blob tracker
- * - prefs
- * - calibration of tracker
- * - calibration save and load
- * - load and saving images
- */
 
 
 //public class test extends PApplet {
 public class VirtualGraffiti extends PApplet{
 
-	//import ddf.minim.*;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	static //import ddf.minim.*;
 
 	//	import fullscreen.*; 
 	//import codeanticode.gsvideo.*;
@@ -39,9 +32,10 @@ public class VirtualGraffiti extends PApplet{
 	 */
 
 	//where the config file is
-	String rootPath = "/Users/stuchilds/Downloads/VGRAF/";
-//	String rootPath = "/home/matthew/work/processingSketches/virtualGraffiti/data";
-	String confFile = rootPath  + "/virtualPainting.properties";
+//	String rootPath = "/Users/stuchilds/Downloads/VGRAF/";
+	String baseDir = "/home/matthew/work/eclipseworkspace/virtualGraffiti/config";
+	static String confFile;
+	
 	//stuff we get from the config file
 
 	//TODO
@@ -58,13 +52,25 @@ public class VirtualGraffiti extends PApplet{
 	String imagePath;
 	String backgroundsPath;
 
-	boolean debug = false;
+	static boolean debug = false;
 	double frameTime, oldFrameTime;
 	
 	PFont fontA;
 	Thing thing;
 
 	public static void main(String args[]) {
+		OptionParser parser = new OptionParser() {
+			{
+				accepts( "basedir" ).withOptionalArg()
+				.describedAs( "file" );
+			}
+		};
+
+		OptionSet options = parser.parse( args );
+		if( options.has( "basedir" ) )
+		{
+			baseDir = (String)options.valueOf( "basedir" );
+		}
 		PApplet.main(new String[] {"VirtualGraffiti.VirtualGraffiti" });
 	}
 
@@ -72,6 +78,8 @@ public class VirtualGraffiti extends PApplet{
 	public void setup() 
 	{
 		frameRate( 60 );
+		confFile = baseDir  + "/virtualPainting.properties";
+		
 		try {
 			P5Properties props=new P5Properties();
 			// load a configuration from a file inside the data folder
@@ -98,9 +106,9 @@ public class VirtualGraffiti extends PApplet{
 			System.out.println( "image save path:" + imagePath );
 			System.out.println( "image load path:" + backgroundsPath );
 		}
-
-		catch(IOException e) {
-			println("couldn't read config file...");
+		catch(Exception e) {
+			System.out.println("couldn't read config file:" + confFile + " : " + e );
+			System.exit(1);
 		}
 		size(w,h);
 		

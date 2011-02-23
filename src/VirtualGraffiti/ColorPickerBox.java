@@ -1,6 +1,7 @@
 package VirtualGraffiti;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 class ColorPickerBox
@@ -107,9 +108,9 @@ void drawBrushBox()
 	parent.stroke( 255 );
 	parent.fill( 255 );
 	parent.line( 0, currentColorBoxHeight / 2 , boxWidth, currentColorBoxHeight / 2 );
-	parent.rectMode( parent.CENTER );
+	parent.rectMode( PConstants.CENTER );
 	parent.rect( brushSize, currentColorBoxHeight / 2, 5, brushSize / 4 );
-	parent.rectMode( parent.CORNER );
+	parent.rectMode( PConstants.CORNER );
 	parent.popMatrix();
 }
 

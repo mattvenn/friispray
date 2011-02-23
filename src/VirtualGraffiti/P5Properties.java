@@ -4,6 +4,11 @@ import java.util.Properties;
 
 class P5Properties extends Properties {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	boolean getBooleanProperty(String id, boolean defState) {
 		return Boolean.parseBoolean(getProperty(id,""+defState));
 	}

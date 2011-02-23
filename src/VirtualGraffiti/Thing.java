@@ -100,10 +100,6 @@ public class Thing
 		canTracker.update();
 		can.update();
 		
-		if( can.implementsButton() && can.getButton() )
-		{
-			System.out.println( "button" );
-		}
 		if( canTracker.hasCan() )
 		{	
 			xy =  canTracker.getXY();
@@ -145,7 +141,16 @@ public class Thing
 			opacity = getOpacity( can.getNozzlePressure());
 		}
 		
-	
+		if( VirtualGraffiti.debug )
+		{
+			System.out.println( "has can: " + canTracker.hasCan() );
+			System.out.println( "isspray: " + isSpraying);
+			System.out.println( "color: " + colorPicker.getCurrentColor() );
+			System.out.println( "opacity: " + opacity );
+			System.out.println( "xy: " + xy.x + "," + xy.y );
+			if( can.implementsButton() && can.getButton() )
+				System.out.println( "button" );
+		}
 	}
 	/* calibrations stuff
 	 * 
@@ -220,8 +225,8 @@ public class Thing
 	int getOpacity( int avgNoz )
 	{
 		//TODO
-		int minOpacity = 0;
-		int maxOpacity = 255;
+	//	int minOpacity = 0;
+		//int maxOpacity = 255;
 		int nozzleKnee = 150; 
 		int opacityKnee = 50; 
 
@@ -248,7 +253,7 @@ public class Thing
 
 		//load random image
 		File file = new File(backgroundsPath);
-		ArrayList images = new ArrayList();
+		ArrayList<String> images = new ArrayList<String>();
 		File[] files = file.listFiles();
 		for (int i = 0; i < files.length; i++)
 		{

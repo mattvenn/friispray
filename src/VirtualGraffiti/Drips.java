@@ -7,7 +7,7 @@ import processing.core.PVector;
 
 class Drips
 {
-	ArrayList drips;
+	ArrayList<Drip> drips;
 	int dripAmount = 6;
 	int mouseHistory = 20;
 	int dripSize = 7;
@@ -26,7 +26,7 @@ class Drips
 		this.minOpacity = minOpacity;
 		this.maxOpacity = maxOpacity;
 		newMouseHistory();
-		drips = new ArrayList(); 
+		drips = new ArrayList<Drip>(); 
 	} 
 
 	//makes a new blank mouse history array

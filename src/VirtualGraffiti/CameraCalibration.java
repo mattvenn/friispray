@@ -82,6 +82,7 @@ public class CameraCalibration {
 		
 		calibrated = true; 
 		calPoints = 0;
+		System.out.println( "read calibration from: " + calibrationFile );
 	}
 	catch( IOException e )
 	{

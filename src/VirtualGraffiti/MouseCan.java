@@ -1,6 +1,7 @@
 package VirtualGraffiti;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 	 public class MouseCan implements Can
@@ -50,7 +51,7 @@ import processing.core.PVector;
 	@Override
 	public boolean isNozzlePressed() {
 		// TODO Auto-generated method stub
-		if( parent.mousePressed && (parent.mouseButton == parent.LEFT)) return true;
+		if( parent.mousePressed && (parent.mouseButton == PConstants.LEFT)) return true;
 		return false;
 	}
 
