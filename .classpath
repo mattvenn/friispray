@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/wrj4P5/library/wrj4P5.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/wrj4P5/library/WiiRemoteJ.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/wrj4P5/library/bluecove-gpl-2.1.0.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/wrj4P5/library/bluecove-2.1.0.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/Loc/library/Loc.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/processing-1.2.1/lib/core.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/OpenCV/library/OpenCV.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/matthew/work/processingSketches/libraries/OpenCV/library"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/matthew/work/eclipseworkspace/rxtx-2.2pre2-bins/RXTXcomm.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/matthew/work/eclipseworkspace/rxtx-2.2pre2-bins/i686-pc-linux-gnu"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
