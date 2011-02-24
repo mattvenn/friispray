@@ -15,7 +15,7 @@ public class VirtualGraffiti extends PApplet{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	static //import ddf.minim.*;
+	//import ddf.minim.*;
 
 	//	import fullscreen.*; 
 	//import codeanticode.gsvideo.*;
@@ -31,27 +31,12 @@ public class VirtualGraffiti extends PApplet{
 	Minim minim;
 	 */
 
+
+
 	//where the config file is
-//	String rootPath = "/Users/stuchilds/Downloads/VGRAF/";
-	String baseDir = "/home/matthew/work/eclipseworkspace/virtualGraffiti/config";
-	static String confFile;
-	
-	//stuff we get from the config file
+	static String confFile = "./virtualPainting.properties";
 
-	//TODO
-	int maxBrushSize;
-	int minBrushSize;
-	int minOpacity;
-	int maxOpacity;
-	String canType;
-	String trackerType;
-
-	int w;
-	int h;
-
-	String imagePath;
-	String backgroundsPath;
-
+	static P5Properties props;
 	static boolean debug = false;
 	double frameTime, oldFrameTime;
 	
@@ -61,15 +46,15 @@ public class VirtualGraffiti extends PApplet{
 	public static void main(String args[]) {
 		OptionParser parser = new OptionParser() {
 			{
-				accepts( "basedir" ).withOptionalArg()
+				accepts( "config" ).withOptionalArg()
 				.describedAs( "file" );
 			}
 		};
 
 		OptionSet options = parser.parse( args );
-		if( options.has( "basedir" ) )
+		if( options.has( "config" ) )
 		{
-			baseDir = (String)options.valueOf( "basedir" );
+			confFile = (String)options.valueOf( "config" );
 		}
 		PApplet.main(new String[] {"VirtualGraffiti.VirtualGraffiti" });
 	}
@@ -78,21 +63,24 @@ public class VirtualGraffiti extends PApplet{
 	public void setup() 
 	{
 		frameRate( 60 );
-		confFile = baseDir  + "/virtualPainting.properties";
+		String imagePath, backgroundsPath, canType, trackerType;
+		int w,h;
 		
 		try {
-			P5Properties props=new P5Properties();
+			props=new P5Properties();
 			// load a configuration from a file inside the data folder
 			props.load(new FileInputStream(confFile));
 
 			w=props.getIntProperty("width",1024);
 			h=props.getIntProperty("height",768);
-			imagePath = props.getStringProperty( "imagePath", "./images/" ); 
-			backgroundsPath = props.getStringProperty( "backgroundsPath",sketchPath + "/data/" ); 
+			/*
 			maxBrushSize = props.getIntProperty("brush.maxBrushSize", 70 );
 			minBrushSize = props.getIntProperty("brush.minBrushSize", 20 );
 			minOpacity = props.getIntProperty("brush.minOpacity", 70 );
 			maxOpacity = props.getIntProperty("brush.maxOpacity", 255 );
+			*/
+			imagePath = props.getStringProperty( "imagePath", "./images/" ); 
+			backgroundsPath = props.getStringProperty( "backgroundsPath",sketchPath + "/data/" ); 
 			canType = props.getStringProperty( "canType", "Mouse" );
 			trackerType = props.getStringProperty( "trackerType","Mouse" );
 			// useWii = false;
@@ -102,15 +90,17 @@ public class VirtualGraffiti extends PApplet{
 			
 			System.out.println( "can type:'" + canType + "'");
 			System.out.println( "tracker type:" + trackerType );
-			
 			System.out.println( "image save path:" + imagePath );
 			System.out.println( "image load path:" + backgroundsPath );
+			
+			size(w,h);
+			thing = new Thing( this, canType, trackerType );
 		}
 		catch(Exception e) {
 			System.out.println("couldn't read config file:" + confFile + " : " + e );
 			System.exit(1);
 		}
-		size(w,h);
+		
 		
 		//fontA = loadFont( rootPath + "/data/Ziggurat-HTF-Black-32.vlw");
 
@@ -130,7 +120,6 @@ public class VirtualGraffiti extends PApplet{
 	  */
 		
 		//can types
-		thing = new Thing( this, canType, trackerType );
 	}
 
 	public void stop()

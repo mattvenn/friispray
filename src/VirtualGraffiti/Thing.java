@@ -8,8 +8,8 @@ import processing.core.PVector;
 
 public class Thing
 {
-	String backgroundsPath = "/home/matthew/work/processingSketches/virtualGraffiti.old/data";
-	String imagePath = "/tmp/";
+//	String backgroundsPath = "/home/matthew/work/processingSketches/virtualGraffiti.old/data";
+	//String imagePath = "/tmp/";
 	PApplet parent;
 	Can can;
 	CanTracker canTracker;
@@ -17,23 +17,38 @@ public class Thing
 	ColorPickerBox colorPicker;
 	PVector xy;
 	boolean isSpraying = false;
-	//TODO
-	boolean useDrips = true;
-	int brushSize = 50;
-	int opacity = 255;
+	
+	
 	int savedImageCount = 0;
 	Drips drips;
+	
+	//get setup from config file
+	boolean useDrips;
+	int minOpacity;
+	int maxOpacity;
+	int maxBrushSize;
+	int minBrushSize;
+	int brushSize;
+	int opacity;
 	
 	Thing( PApplet parent, String canType, String trackerType )
 	{
 		this.parent = parent;
 		xy = new PVector(0,0);
 		
-		//TODO
-		int minOpacity = 70;
-		int maxOpacity = 255;
-		int maxBrushSize = 80;
-		int minBrushSize = 10;
+		//config
+		minOpacity = VirtualGraffiti.props.getIntProperty( "brush.minOpacity", 70 );
+		maxOpacity = VirtualGraffiti.props.getIntProperty( "brush.maxOpacity", 255 );
+		minBrushSize = VirtualGraffiti.props.getIntProperty( "brush.minBrushSize", 10 );
+		maxBrushSize = VirtualGraffiti.props.getIntProperty( "brush.maxBrushSize", 80 );
+	
+		//defaults
+		opacity = VirtualGraffiti.props.getIntProperty( "brush.defaultOpacity", 255 );
+		brushSize = VirtualGraffiti.props.getIntProperty( "brush.defaultBrushSize", 50 );
+		
+		useDrips = VirtualGraffiti.props.getBooleanProperty( "drips", false );
+		
+		//create helpers
 	    drips = new Drips( parent, minBrushSize, maxBrushSize, minOpacity, maxOpacity);
 		colorPicker = new ColorPickerBox( parent, 5, 5, 100, 400, 12, 5 );
 		calibration = new CameraCalibration( parent );
@@ -130,7 +145,7 @@ public class Thing
 		
 		//color
 		if( isSpraying )
-					colorPicker.update( xy );
+			colorPicker.update( xy );
 		//can stuff
 		if( can.implementsDistance() )
 		{
@@ -147,6 +162,7 @@ public class Thing
 			System.out.println( "isspray: " + isSpraying);
 			System.out.println( "color: " + colorPicker.getCurrentColor() );
 			System.out.println( "opacity: " + opacity );
+			System.out.println( "brushSize: " + brushSize );
 			System.out.println( "xy: " + xy.x + "," + xy.y );
 			if( can.implementsButton() && can.getButton() )
 				System.out.println( "button" );
@@ -248,10 +264,12 @@ public class Thing
 		savedImageCount ++;
 
 		//save the image first
-		 String saveName = imagePath + "image" + savedImageCount + ".jpg";
-		 parent.save( saveName );
+		String imagePath = VirtualGraffiti.props.getProperty("imagePath", "./images" );
+		String saveName = imagePath + "image" + savedImageCount + ".jpg";
+		parent.save( saveName );
 
 		//load random image
+		String backgroundsPath = VirtualGraffiti.props.getProperty("backgroundsPath", "./backgrounds" );
 		File file = new File(backgroundsPath);
 		ArrayList<String> images = new ArrayList<String>();
 		File[] files = file.listFiles();

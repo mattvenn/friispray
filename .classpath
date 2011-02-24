@@ -18,5 +18,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/matthew/work/eclipseworkspace/rxtx-2.2pre2-bins/i686-pc-linux-gnu"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/matthew/work/eclipseworkspace/jopt-simple-3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
