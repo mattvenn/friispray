@@ -19,7 +19,8 @@ import java.util.TooManyListenersException;
 
 public class SerialReader implements SerialPortEventListener{
 
-	int baud = 19200;
+	int serialPortBaud;
+	String serialPortName;
 	BufferedReader bufferedReader;
 	BufferedWriter bufferedWriter;
 	static SerialPort serialPort;
@@ -27,11 +28,6 @@ public class SerialReader implements SerialPortEventListener{
 	static InputStream in = null;
 	boolean newSerial = false;
 	String latestMessage;
-	
-	SerialReader()
-	{
-		setup();
-	}
 	
 	boolean newSerial()
 	{
@@ -55,8 +51,10 @@ public class SerialReader implements SerialPortEventListener{
 	}
 
 
-	public void setup()
+	SerialReader()
 	{
+		serialPortName = VirtualGraffiti.props.getStringProperty( "serialPortDev", "/dev/ttyUSB0" );
+		serialPortBaud = VirtualGraffiti.props.getIntProperty( "serialPortBaud", 19200 );
 		openSerial();
 
 		try {
@@ -92,31 +90,21 @@ public class SerialReader implements SerialPortEventListener{
 
 			try
 			{
-				System.out.println( "trying /dev/ttyUSB0" );
-				portId = CommPortIdentifier.getPortIdentifier("/dev/ttyUSB0");
+				System.out.println( "trying to open " + serialPortName);
+				portId = CommPortIdentifier.getPortIdentifier(serialPortName);
 			}
 			catch( NoSuchPortException e )
 			{
-				try
-				{
-					String portName = "/dev/tty.usbmodem1d11";
-					System.out.println( "trying " + portName );
-					portId = CommPortIdentifier.getPortIdentifier(portName);
-				}
-				catch( NoSuchPortException e2 )
-				{
-					System.out.println( "couldn't open usb0 or 1" );
-					System.exit(1 );
-				}
+				System.out.println( "couldn't open " + serialPortName + " : " + e );
+				System.exit(1 );
 			}
 
 			System.out.println( "opening port" + portId.getName() );
 			serialPort = (SerialPort) portId.open("virtual graffiti", 5000);
-			int baudRate = baud; // 57600; // 57600bps
 			// Set serial port to 57600bps-8N1..my favourite
-			System.out.println( "setting port params" );
+			System.out.println( "setting port params: " + serialPortBaud );
 			serialPort.setSerialPortParams(
-					baudRate,
+					serialPortBaud,
 					SerialPort.DATABITS_8,
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
@@ -131,7 +119,6 @@ public class SerialReader implements SerialPortEventListener{
 			}
 			catch( InterruptedException e )
 			{}
-			System.out.println( "assigning io streams" );
 			out = serialPort.getOutputStream();
 			in = serialPort.getInputStream();
 
