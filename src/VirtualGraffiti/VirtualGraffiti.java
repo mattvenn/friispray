@@ -6,7 +6,8 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import processing.core.PApplet;
 import processing.core.PFont;
-
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 //public class test extends PApplet {
 public class VirtualGraffiti extends PApplet{
@@ -34,12 +35,12 @@ public class VirtualGraffiti extends PApplet{
 
 
 	//where the config file is
-	static String confFile = "./virtualPainting.properties";
+	static String confFile = "/home/matthew/work/eclipseworkspace/virtualGraffiti/config/virtualPainting.properties";
 
 	static P5Properties props;
 	static boolean debug = false;
 	double frameTime, oldFrameTime;
-	
+
 	PFont fontA;
 	Thing thing;
 
@@ -65,7 +66,7 @@ public class VirtualGraffiti extends PApplet{
 		frameRate( 60 );
 		String imagePath, backgroundsPath, canType, trackerType;
 		int w,h;
-		
+
 		try {
 			props=new P5Properties();
 			// load a configuration from a file inside the data folder
@@ -78,7 +79,7 @@ public class VirtualGraffiti extends PApplet{
 			minBrushSize = props.getIntProperty("brush.minBrushSize", 20 );
 			minOpacity = props.getIntProperty("brush.minOpacity", 70 );
 			maxOpacity = props.getIntProperty("brush.maxOpacity", 255 );
-			*/
+			 */
 			imagePath = props.getStringProperty( "imagePath", "./images/" ); 
 			backgroundsPath = props.getStringProperty( "backgroundsPath",sketchPath + "/data/" ); 
 			canType = props.getStringProperty( "canType", "Mouse" );
@@ -87,12 +88,12 @@ public class VirtualGraffiti extends PApplet{
 			//	    useCan = props.getBooleanProperty( "useCan", true );
 			//    calibrationDelay = props.getIntProperty("calibration.delayLength", 10 );
 			//   calibrationPause = props.getIntProperty("calibration.pauseLength", 30 );
-			
+
 			System.out.println( "can type:'" + canType + "'");
 			System.out.println( "tracker type:" + trackerType );
 			System.out.println( "image save path:" + imagePath );
 			System.out.println( "image load path:" + backgroundsPath );
-			
+
 			size(w,h);
 			thing = new Thing( this, canType, trackerType );
 		}
@@ -100,8 +101,18 @@ public class VirtualGraffiti extends PApplet{
 			System.out.println("couldn't read config file:" + confFile + " : " + e );
 			System.exit(1);
 		}
-		
-		
+
+		Signal.handle(new Signal("INT"), new SignalHandler ()
+		{
+			public void handle(Signal sig) 
+			{
+				stop();
+			}
+		});
+
+		thing.setup();
+
+
 		//fontA = loadFont( rootPath + "/data/Ziggurat-HTF-Black-32.vlw");
 
 		// Create the fullscreen object
@@ -110,15 +121,15 @@ public class VirtualGraffiti extends PApplet{
 		// enter fullscreen mode
 		//  fs.enter(); 
 		//load the sounds 
-		
+
 		/*
 			  minim = new Minim(this);
 		  rattle = minim.loadSample("rattle.wav", 2048);
 		  if ( rattle == null ) println("Didn't get rattle!");
 		  spray = minim.loadFile("spraylong.wav", 2048);
 		  if( spray == null ) println( "didn't get spray!" );
-	  */
-		
+		 */
+
 		//can types
 	}
 
@@ -130,53 +141,64 @@ public class VirtualGraffiti extends PApplet{
 	  spray.close();
 	  minim.stop();
 		 */
+		System.out.println( "shutting down nicely");
+		thing.stop();
+		System.exit(0);
 	}
 
 	public void draw()
 	{
 		double count = 0;
-
-		//first update the can tracker
-		thing.update();
-		if( thing.calibrated() )
+		try
 		{
-			oldFrameTime = frameTime;
-			thing.paint();
-			frameTime = millis();
-			if( debug )
+
+			//first update the can tracker
+			thing.update();
+			if( thing.calibrated() )
 			{
-			int fpsInt = (int)( 1000 / ( frameTime - oldFrameTime ));
-			if( count ++ % 1000 == 0 )
-				System.out.println( "fps: " + fpsInt );
+				oldFrameTime = frameTime;
+				thing.paint();
+				frameTime = millis();
+				if( debug )
+				{
+					int fpsInt = (int)( 1000 / ( frameTime - oldFrameTime ));
+					if( count ++ % 1000 == 0 )
+						System.out.println( "fps: " + fpsInt );
+				}
+			}
+			else
+			{
+				thing.calibrate();
 			}
 		}
-		else
+		catch( Exception e )
 		{
-			thing.calibrate();
+			System.out.println( "caught unhandled exception! : " + e );
+			stop();
 		}
 	}	
 
 	public void keyPressed()
 	{
-	  if( key == 'c' )
-	  {
-		  thing.wipeCalibration();
-	  }
-	  if( key == 'l' )
-	  {
-		  thing.loadCalibration();
-	  }
-	  if( key == 's' )
-	  {
-		  thing.storeCalibration();
-	  }
-	  if( key == 'd' )
-	  {
-		  if( debug ) 
-			  debug = false;
-		  else
-			  debug = true;
-	  }
+		if( key == 'c' )
+		{
+			thing.wipeCalibration();
+		}
+		if( key == 'l' )
+		{
+			thing.loadCalibration();
+		}
+		if( key == 's' )
+		{
+			thing.storeCalibration();
+		}
+		if( key == 'd' )
+		{
+			if( debug ) 
+				debug = false;
+			else
+				debug = true;
+		}
 	}
 
 }

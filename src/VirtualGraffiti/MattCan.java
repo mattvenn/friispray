@@ -199,4 +199,10 @@ public class MattCan implements Can{
 
 	}
 
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		serial.stop();
+	}
+
 }

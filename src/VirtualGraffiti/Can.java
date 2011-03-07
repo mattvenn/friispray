@@ -13,4 +13,5 @@ package VirtualGraffiti;
   boolean isNozzlePressed();
   boolean implementsButton(); 
   boolean getButton();
+  void stop();
 }

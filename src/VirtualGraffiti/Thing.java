@@ -8,7 +8,7 @@ import processing.core.PVector;
 
 public class Thing
 {
-//	String backgroundsPath = "/home/matthew/work/processingSketches/virtualGraffiti.old/data";
+	//	String backgroundsPath = "/home/matthew/work/processingSketches/virtualGraffiti.old/data";
 	//String imagePath = "/tmp/";
 	PApplet parent;
 	Can can;
@@ -17,39 +17,39 @@ public class Thing
 	ColorPickerBox colorPicker;
 	PVector xy;
 	boolean isSpraying = false;
-	
-	
+
+
 	int savedImageCount = 0;
 	Drips drips;
-	
+
 	//get setup from config file
 	boolean useDrips;
-	int minOpacity;
-	int maxOpacity;
-	int maxBrushSize;
-	int minBrushSize;
+	static int minOpacity;
+	static int maxOpacity;
+	static int maxBrushSize;
+	static int minBrushSize;
 	int brushSize;
 	int opacity;
-	
+
 	Thing( PApplet parent, String canType, String trackerType )
 	{
 		this.parent = parent;
 		xy = new PVector(0,0);
-		
+
 		//config
 		minOpacity = VirtualGraffiti.props.getIntProperty( "brush.minOpacity", 70 );
 		maxOpacity = VirtualGraffiti.props.getIntProperty( "brush.maxOpacity", 255 );
 		minBrushSize = VirtualGraffiti.props.getIntProperty( "brush.minBrushSize", 10 );
 		maxBrushSize = VirtualGraffiti.props.getIntProperty( "brush.maxBrushSize", 80 );
-	
+
 		//defaults
 		opacity = VirtualGraffiti.props.getIntProperty( "brush.defaultOpacity", 255 );
 		brushSize = VirtualGraffiti.props.getIntProperty( "brush.defaultBrushSize", 50 );
-		
+
 		useDrips = VirtualGraffiti.props.getBooleanProperty( "drips", false );
-		
+
 		//create helpers
-	    drips = new Drips( parent, minBrushSize, maxBrushSize, minOpacity, maxOpacity);
+		drips = new Drips( parent, minBrushSize, maxBrushSize, minOpacity, maxOpacity);
 		colorPicker = new ColorPickerBox( parent, 5, 5, 100, 400, 12, 5 );
 		calibration = new CameraCalibration( parent );
 
@@ -85,10 +85,18 @@ public class Thing
 		{
 			canTracker = new WiimoteTracker( parent );   
 		}
+		else if( trackerType.contentEquals("LaserWiimote" ))
+		{
+			canTracker = new LaserWiimoteTracker( parent );   
+		}
 		else if( trackerType.contentEquals("Video" ))
 		{
 			//Thread canTracker = new Thread(VideoTracker);
 			//  canTracker.start();
+		}
+		else if( trackerType.contentEquals( "Flob" ) )
+		{
+			canTracker = new FlobTracker(parent);
 		}
 		else if( trackerType.contentEquals( "OpenCV" ) )
 		{
@@ -105,23 +113,32 @@ public class Thing
 		}
 	}
 
+	void setup()
+	{
+		canTracker.setup();
+	}
+	void stop()
+	{
+		canTracker.stop();
+		can.stop();
+	}
 	boolean isSpraying()
 	{
 		return isSpraying;
 	}	
-	
+
 	void update()
 	{
 		canTracker.update();
 		can.update();
-		
+
 		if( canTracker.hasCan() )
 		{	
 			xy =  canTracker.getXY();
-			
+
 			if( canTracker.needsTransformation() )
 				xy = calibration.translate( xy );
-			
+
 			if( can.implementsNozzlePressure() )
 			{
 				if( can.isNozzlePressed() )
@@ -142,25 +159,31 @@ public class Thing
 		{
 			isSpraying = false;
 		}
-		
+
 		//color
 		if( isSpraying )
 			colorPicker.update( xy );
 		//can stuff
 		if( can.implementsDistance() )
 		{
-			brushSize = can.getDistance(); 
+			brushSize = can.getDistance( ); 
+		}
+		if( canTracker.implementsDistance() )
+		{
+			brushSize = canTracker.getDistance();
 		}
 		if( can.implementsNozzlePressure() )
 		{
 			opacity = getOpacity( can.getNozzlePressure());
 		}
-		
+
 		if( VirtualGraffiti.debug )
 		{
 			System.out.println( "has can: " + canTracker.hasCan() );
 			System.out.println( "isspray: " + isSpraying);
+			System.out.println( "distance: " + canTracker.getDistance());
 			System.out.println( "color: " + colorPicker.getCurrentColor() );
+			System.out.println( "nozzlePressure: " + can.getNozzlePressure() );
 			System.out.println( "opacity: " + opacity );
 			System.out.println( "brushSize: " + brushSize );
 			System.out.println( "xy: " + xy.x + "," + xy.y );
@@ -197,14 +220,14 @@ public class Thing
 		if( canTracker.needsTransformation() )
 			calibration.loadCalibration();
 	}
-	
+
 	boolean calibrated()
 	{
 		if( canTracker.needsTransformation() && ! calibration.calibrated() )
 			return false;
 		return true;
 	}
-	
+
 	void paint()
 	{
 		colorPicker.display();
@@ -214,7 +237,7 @@ public class Thing
 		if( isSpraying )
 		{
 			parent.ellipse( xy.x, xy.y , brushSize, brushSize );
-			//  System.out.println( "got can" );
+			 System.out.println( "spraying right now: " + xy.x+ ":" + xy.y + " bs: " + brushSize );
 			//if( ! spray.isPlaying() ) spray.loop();
 			if( useDrips )
 				drips.addDrip( xy, brushSize, opacity, colorPicker.getCurrentColor( ) ); 
@@ -226,68 +249,72 @@ public class Thing
 
 		//draw the drips
 		if( useDrips )
-			 drips.drawDrips();
+			drips.drawDrips();
 
 		if( colorPicker.getWipeButton() )
 		{
 			System.out.println( "wiping background" );
 			loadRandomBackground();
+			parent.delay( 200 );
 			//parent.background(0);
 		}
 
 	}
-	
 
-	int getOpacity( int avgNoz )
+
+	int getOpacity( int nozzle )
 	{
-		//TODO
-	//	int minOpacity = 0;
-		//int maxOpacity = 255;
-		int nozzleKnee = 150; 
-		int opacityKnee = 50; 
-
-		int opacity;
-		if( avgNoz < nozzleKnee )
-		{
-			opacity = (int)PApplet.map( avgNoz, 0, nozzleKnee, 0, opacityKnee );
-		}
-		else
-		{
-			opacity = (int)PApplet.map( avgNoz, nozzleKnee, 255, opacityKnee, 255 );
-
-		}
-		//System.out.println( opacity );
-		return opacity;
+		return nozzle;
 	}
+
 	void loadRandomBackground()
 	{
 		savedImageCount ++;
-
 		//save the image first
-		String imagePath = VirtualGraffiti.props.getProperty("imagePath", "./images" );
-		String saveName = imagePath + "image" + savedImageCount + ".jpg";
-		parent.save( saveName );
+		String saveDir = VirtualGraffiti.props.getProperty("imagePath", "./images" );
+		String saveImagePath = saveDir + "image" + savedImageCount + ".jpg";
+		File saveDirFile = new File(saveDir);
+		if (saveDirFile.exists())
+		{
+			System.out.println( "saving image: " + saveImagePath);
+			parent.save( saveImagePath );
+		}
+		else
+		{
+			System.out.println( "not saving image because imagePath doesn't exist:" + saveDir );
+		}
 
 		//load random image
 		String backgroundsPath = VirtualGraffiti.props.getProperty("backgroundsPath", "./backgrounds" );
 		File file = new File(backgroundsPath);
-		ArrayList<String> images = new ArrayList<String>();
-		File[] files = file.listFiles();
-		for (int i = 0; i < files.length; i++)
+		if( file.exists() )
 		{
-			File f = files[i];    
-			String fileName = f.getName();
-			if( fileName.endsWith( ".jpg" ) )
+			ArrayList<String> images = new ArrayList<String>();
+			File[] files = file.listFiles();
+			if( files.length > 0)
 			{
-				images.add( fileName );
+				for (int i = 0; i < files.length; i++)
+				{
+					File f = files[i];    
+					String fileName = f.getName();
+					if( fileName.endsWith( ".jpg" ) )
+					{
+						images.add( fileName );
+					}
+				}
+				int randomImageNumber = (int)parent.random( 0, images.size() );
+				String imagePath = backgroundsPath + "/" + (String)images.get( randomImageNumber );
+				PImage bg = parent.loadImage( imagePath );
+				bg.resize( parent.width, parent.height);
+				parent.background(bg);
 			}
 		}
-		int randomImageNumber = (int)parent.random( 0, images.size() );
-		System.out.println( "loading: " + backgroundsPath + "/" + (String)images.get( randomImageNumber ));
-		PImage bg = parent.loadImage( backgroundsPath + "/" + (String)images.get( randomImageNumber ) );
-		
-		bg.resize( parent.width, parent.height);
-		parent.background(bg);
+		else
+		{
+			System.out.println( "not loading image because no images found in:" + backgroundsPath );
+			parent.background( 0 );
+		}
+
 
 	}
 }

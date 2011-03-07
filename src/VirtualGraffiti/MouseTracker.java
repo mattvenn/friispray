@@ -40,5 +40,15 @@ public class MouseTracker implements CanTracker
   {
     return 0;
   }
+@Override
+public void stop() {
+	// TODO Auto-generated method stub
+	
+}
+@Override
+public void setup() {
+	// TODO Auto-generated method stub
+	
+}
   
 }

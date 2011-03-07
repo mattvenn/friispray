@@ -72,5 +72,10 @@ public class LEDCan implements Can {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

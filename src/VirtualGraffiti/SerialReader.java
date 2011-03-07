@@ -133,7 +133,7 @@ public class SerialReader implements SerialPortEventListener{
 		}
 	}
 
-	public void closeSerial()
+	public void stop()
 	{
 		if (serialPort != null) {
 			try {
@@ -145,7 +145,7 @@ public class SerialReader implements SerialPortEventListener{
 			}
 			// Close the port.
 			serialPort.close();
-
+			System.out.println( "closed serial port" );
 		}
 	}
 

@@ -19,5 +19,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/matthew/work/eclipseworkspace/jopt-simple-3.2.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/flob/library/flob.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/GSVideo/library/GSVideo.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/GSVideo/library/jna.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/GSVideo/library/gstreamer-java.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

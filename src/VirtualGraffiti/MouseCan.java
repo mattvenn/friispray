@@ -54,5 +54,10 @@ import processing.core.PVector;
 		if( parent.mousePressed && (parent.mouseButton == PConstants.LEFT)) return true;
 		return false;
 	}
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

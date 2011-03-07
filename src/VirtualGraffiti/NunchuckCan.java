@@ -9,11 +9,13 @@ public class NunchuckCan implements Can {
 	PApplet parent;
 	int button1 = 0;
 	int nozzlePressure = 0;
+	int nozzleOnPressure;
 	
 	NunchuckCan( PApplet parent )
 	{
 		this.parent = parent;
 		System.out.println( "starting nunchuck can" );		
+		nozzleOnPressure = VirtualGraffiti.props.getIntProperty( "Nunchuck.nozzleOnPressure", 10 );
 		
 		serial = new SerialReader();
 	}
@@ -40,14 +42,26 @@ public class NunchuckCan implements Can {
 
 	@Override
 	public int getNozzlePressure() {
-		// TODO Auto-generated method stub
-		return nozzlePressure;
+			int nozzleKnee = 150; 
+			int opacityKnee = 50; 
+
+			int opacity;
+			if( nozzlePressure < nozzleKnee )
+			{
+				opacity = (int)PApplet.map( nozzlePressure, 0, nozzleKnee, 0, opacityKnee );
+			}
+			else
+			{
+				opacity = (int)PApplet.map( nozzlePressure, nozzleKnee, 255, opacityKnee, 255 );
+			}
+			//System.out.println( opacity );
+			return opacity;
 	}
 
 	@Override
 	public boolean isNozzlePressed() {
 		//TODO fix calib
-		if( getNozzlePressure() > 10 )
+		if( getNozzlePressure() > nozzleOnPressure )
 			return true;
 		return false;
 	}
@@ -102,9 +116,17 @@ public class NunchuckCan implements Can {
 			//	brushSize = PApplet.map( avgDist, minD, maxD, maxBrushSize, minBrushSize);
 
 			}
+			else if( msg.startsWith( "0x55 data" ))
+			{
+			 //do nothing
+			}
+			else if( msg.startsWith( "Start" ))
+			{
+				System.out.println( "connected to nunchuck OK" );
+			}
 			else
 			{
-				throw new RuntimeException( "didn't understand msg: " + msg );
+				System.out.println( "nunchuck bad msg: " + msg );
 			}
 			
 		}
@@ -113,7 +135,10 @@ public class NunchuckCan implements Can {
 			System.out.println( "bad msg: " + e );
 		}
 	}
-
+	public void stop() {
+		// TODO Auto-generated method stub
+		serial.stop();
+	}
 
 	@Override
 	public void wipeCalibration() {

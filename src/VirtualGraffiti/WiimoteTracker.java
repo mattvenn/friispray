@@ -9,9 +9,9 @@ import processing.core.PVector;
 
 public class WiimoteTracker implements CanTracker {
 
-	Wrj4P5 wii;
-	PVector xy;
-	PApplet parent;
+	public Wrj4P5 wii;
+	public PVector xy;
+	public PApplet parent;
 	boolean hasCan = false;
 
 	WiimoteTracker(PApplet parent)
@@ -19,6 +19,9 @@ public class WiimoteTracker implements CanTracker {
 		this.parent = parent;
 		System.out.println( "wiimote tracker starting");
 		xy = new PVector( 0, 0 );
+	}
+	public void setup()
+	{
 		try
 		{
 			wii=new Wrj4P5(parent);
@@ -39,11 +42,8 @@ public class WiimoteTracker implements CanTracker {
 			System.exit( 1 );
 		}
 		System.out.println( "connected OK!" );
-
-
-
-
 	}
+	
 	@Override
 	public int getDistance() {
 		// TODO Auto-generated method stub
@@ -97,6 +97,11 @@ public class WiimoteTracker implements CanTracker {
 			System.out.println( "exception: " + e );
 		}
 
+	}
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -25,7 +25,8 @@ public class OpenCVTracker implements CanTracker {
 	Blob[] blobs; 
 	OpenCVTracker(PApplet parent )
 	{
-		System.out.println( "wiimote tracker starting");
+		System.out.println( "openCV tracker starting");
+		
 		xy = new PVector(0,0);
 		this.parent = parent;
 		opencv = new OpenCV( parent );
@@ -35,28 +36,29 @@ public class OpenCVTracker implements CanTracker {
 		opencv.capture(w,h);
 		opencv.remember();
 	}
-
 	public void update()
 	{
 		opencv.read();
 		//opencv.flip( OpenCV.FLIP_HORIZONTAL );
 
-		parent.image( opencv.image(), 10, 10 );	            // RGB image
-		parent.image( opencv.image(OpenCV.GRAY), 20+w, 10 );   // GRAY image
-		parent.image( opencv.image(OpenCV.MEMORY), 10, 20+h ); // image in memory
+	//	parent.image( opencv.image(), 10, 10 );	            // RGB image
+	//	parent.image( opencv.image(OpenCV.GRAY), 20+w, 10 );   // GRAY image
+	//	parent.image( opencv.image(OpenCV.MEMORY), 10, 20+h ); // image in memory
 
 		opencv.absDiff();
 		opencv.threshold(threshold);
-		parent.image( opencv.image(OpenCV.GRAY), 20+w, 20+h ); // absolute difference image
+	//	parent.image( opencv.image(OpenCV.GRAY), 20+w, 20+h ); // absolute difference image
 
 
 		// working with blobs
+		//min, max area, max blobs, find holes
 		blobs = opencv.blobs( 100, w*h/3, 20, true );
 		Point centroid = new Point();
 		if( blobs.length > 0 )
 		{
 			hasCan = true;
 			centroid = blobs[0].centroid;
+			System.out.println( centroid.getX() + ":" +  centroid.getY() );
 			xy.x = (int)centroid.getX();
 			xy.y = (int)centroid.getY();
 		}
@@ -97,6 +99,11 @@ public class OpenCVTracker implements CanTracker {
 	public boolean needsTransformation() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	@Override
+	public void setup() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
