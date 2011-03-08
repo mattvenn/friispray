@@ -15,7 +15,9 @@ public class Thing
 	CanTracker canTracker;
 	CameraCalibration calibration;
 	ColorPickerBox colorPicker;
+	Line line;
 	PVector xy;
+	
 	boolean isSpraying = false;
 
 
@@ -52,7 +54,8 @@ public class Thing
 		drips = new Drips( parent, minBrushSize, maxBrushSize, minOpacity, maxOpacity);
 		colorPicker = new ColorPickerBox( parent, 5, 5, 100, 400, 12, 5 );
 		calibration = new CameraCalibration( parent );
-
+		line = new Line(parent);
+		
 		if( canType == "Laser" )
 		{
 			//can = new LaserCan( minBrushSize, maxBrushSize );
@@ -233,11 +236,14 @@ public class Thing
 		colorPicker.display();
 		parent.noStroke();
 		parent.fill( colorPicker.getCurrentColor(), opacity );
-
+		parent.stroke( colorPicker.getCurrentColor(), opacity );
 		if( isSpraying )
 		{
-			parent.ellipse( xy.x, xy.y , brushSize, brushSize );
-			 System.out.println( "spraying right now: " + xy.x+ ":" + xy.y + " bs: " + brushSize );
+			//parent.ellipse( xy.x, xy.y , brushSize, brushSize );
+			//parent.strokeWeight( brushSize );
+			line.addPoint(xy,colorPicker.getCurrentColor(), brushSize, opacity );
+						
+		//	 System.out.println( "spraying right now: " + xy.x+ ":" + xy.y + " bs: " + brushSize );
 			//if( ! spray.isPlaying() ) spray.loop();
 			if( useDrips )
 				drips.addDrip( xy, brushSize, opacity, colorPicker.getCurrentColor( ) ); 
@@ -245,6 +251,7 @@ public class Thing
 		else
 		{
 			//   if( spray.isPlaying() ) spray.pause();
+			line.stopDraw(xy);
 		}
 
 		//draw the drips
@@ -264,7 +271,7 @@ public class Thing
 
 	int getOpacity( int nozzle )
 	{
-		return nozzle;
+		return (int)PApplet.map( nozzle, 0, 255, minOpacity, maxOpacity );
 	}
 
 	void loadRandomBackground()
