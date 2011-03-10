@@ -152,6 +152,8 @@ public class FlobTracker implements CanTracker {
 		catch( Exception e )
 		{
 			System.out.println( "flob track exception: " + e );
+			System.out.println( "check camera isn't already in use" );
+			System.exit(1);
 
 		}
 	}

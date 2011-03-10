@@ -5,18 +5,20 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class Line {
+public class LineDrawer {
 
 
 	ArrayList <PVector> mouse;
 
 	int size = 20;
+	int opacity;
 	int divider = 7;
 	float iterations = 50;
 	float alphaScale = (float) 0.05;
+	int color;
 	PVector oldVec, cur;
 	PApplet parent;
-	public Line(PApplet parent)
+	public LineDrawer(PApplet parent)
 	{
 		this.parent = parent;
 	   
@@ -36,8 +38,12 @@ public class Line {
 	    p.x = (point1.x * b) + (point2.x * a);
 	    p.y = (point1.y * b) + (point2.y * a);
 
-	    parent.ellipse( p.x, p.y, size,size );
+	    drawPoint(p,opacity, size,color);
 	  }
+	}
+	public void drawPoint(PVector p,int opacity, int size,int color) {
+		parent.fill( color, opacity * alphaScale );
+		parent.ellipse( p.x, p.y, size,size );
 	}
 
 	void drawBezier(PVector A, PVector v1, PVector v2, PVector D )
@@ -59,7 +65,7 @@ public class Line {
 	    p.x = A.x*b*b*b + 3*B.x*b*b*a + 3*C.x*b*a*a + D.x*a*a*a; 
 	    p.y = A.y*b*b*b + 3*B.y*b*b*a + 3*C.y*b*a*a + D.y*a*a*a; 
 	   
-	    parent.ellipse( p.x,p.y,size,size);
+	    drawPoint(p,opacity,size,color);
 	  }
 	}
 
@@ -68,11 +74,11 @@ public class Line {
 		  drawLine(xy);
 		  mouse.clear();
 	}
-	void addPoint( PVector xy, int color, int size, int opacity )
+	void addPoint( PVector xy,  int size, int opacity )
 	{
 		parent.noStroke();
 		this.size = size;
-		parent.fill( color, opacity * alphaScale );
+		this.opacity = opacity;
 		mouse.add( xy.get() ) ;
 	    drawLine(xy);
 	}
@@ -82,7 +88,7 @@ public class Line {
 	 
 	  if( mouse.size() == 1 )
 	  {
-	     parent.ellipse( xy.x,xy.y, size,size );
+	     drawPoint(xy,opacity,size,color);
 	  }
 	  if( mouse.size() == 2 )
 	  {
@@ -96,5 +102,10 @@ public class Line {
 	    drawBezier( mouse.get(1), entVec, exVec, mouse.get(2) );
 	    mouse.remove( 0  );
 	  }
+	}
+	
+	public void setColor( int color )
+	{
+		this.color = color;
 	}
 }
