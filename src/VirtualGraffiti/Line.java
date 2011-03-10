@@ -11,7 +11,7 @@ public class Line {
 	ArrayList <PVector> mouse;
 
 	int size = 20;
-	int divider = 15;
+	int divider = 7;
 	float iterations = 50;
 	float alphaScale = (float) 0.05;
 	PVector oldVec, cur;
@@ -87,6 +87,7 @@ public class Line {
 	  if( mouse.size() == 2 )
 	  {
 	    drawLine( mouse.get(1), mouse.get(0) );
+//	    mouse.remove( 0  );
 	  }
 	  if( mouse.size() > 3 )
 	  {

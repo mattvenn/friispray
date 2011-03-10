@@ -1,11 +1,15 @@
 package VirtualGraffiti;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.opengl.*;
+import javax.media.opengl.GL;
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
@@ -63,44 +67,46 @@ public class VirtualGraffiti extends PApplet{
 
 	public void setup() 
 	{
-		frameRate( 60 );
 		String imagePath, backgroundsPath, canType, trackerType;
-		int w,h;
+		int w=0,h=0;
 
 		try {
 			props=new P5Properties();
 			// load a configuration from a file inside the data folder
-			props.load(new FileInputStream(confFile));
+				props.load(new FileInputStream(confFile));
 
 			w=props.getIntProperty("width",1024);
 			h=props.getIntProperty("height",768);
-			/*
-			maxBrushSize = props.getIntProperty("brush.maxBrushSize", 70 );
-			minBrushSize = props.getIntProperty("brush.minBrushSize", 20 );
-			minOpacity = props.getIntProperty("brush.minOpacity", 70 );
-			maxOpacity = props.getIntProperty("brush.maxOpacity", 255 );
-			 */
+			
 			imagePath = props.getStringProperty( "imagePath", "./images/" ); 
 			backgroundsPath = props.getStringProperty( "backgroundsPath",sketchPath + "/data/" ); 
 			canType = props.getStringProperty( "canType", "Mouse" );
 			trackerType = props.getStringProperty( "trackerType","Mouse" );
-			// useWii = false;
-			//	    useCan = props.getBooleanProperty( "useCan", true );
-			//    calibrationDelay = props.getIntProperty("calibration.delayLength", 10 );
-			//   calibrationPause = props.getIntProperty("calibration.pauseLength", 30 );
 
 			System.out.println( "can type:'" + canType + "'");
 			System.out.println( "tracker type:" + trackerType );
 			System.out.println( "image save path:" + imagePath );
 			System.out.println( "image load path:" + backgroundsPath );
-
+			
+			frameRate( 80 );
 			size(w,h);
 			thing = new Thing( this, canType, trackerType );
-		}
+			thing.setup();
+
+			} catch (FileNotFoundException e) {
+				System.out.println("couldn't read config file:" + confFile + " : " + e );
+				System.exit(1);
+			} catch (IOException e) {
+				System.out.println("couldn't read config file:" + confFile + " : " + e );
+				System.exit(1);
+			}
 		catch(Exception e) {
-			System.out.println("couldn't read config file:" + confFile + " : " + e );
-			System.exit(1);
+				System.out.println("problem starting up: " + e );
+				e.printStackTrace();
+				System.exit(1);
+			
 		}
+		
 
 		Signal.handle(new Signal("INT"), new SignalHandler ()
 		{
@@ -109,8 +115,7 @@ public class VirtualGraffiti extends PApplet{
 				stop();
 			}
 		});
-
-		thing.setup();
+		
 
 
 		//fontA = loadFont( rootPath + "/data/Ziggurat-HTF-Black-32.vlw");

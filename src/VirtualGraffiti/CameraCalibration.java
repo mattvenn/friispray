@@ -26,7 +26,6 @@ public class CameraCalibration {
 	{
 		this.parent = parent;
 		int calibInset = 40;
-
 		dots[0] = new PVector( calibInset, calibInset ); //top left
 		dots[1] = new PVector( parent.width -calibInset, calibInset ); //top right
 		dots[2] = new PVector( calibInset, parent.height -calibInset ); //bot left

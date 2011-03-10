@@ -135,9 +135,9 @@ public class FlobTracker implements CanTracker {
 				hasCan = true;
 				float spotDistance = PApplet.sqrt(PApplet.sq(canX[0]-canX[1]) + PApplet.sq( canY[0]-canY[1] ));
 				if( VirtualGraffiti.debug )
-					System.out.println( spotDistance );
+					System.out.println( "spot distance: " + spotDistance );
 				//needs calibration TODO
-				distance = (int)(PApplet.map( spotDistance,24 , 9, Thing.minBrushSize, Thing.maxBrushSize ));
+				distance = (int)(PApplet.map( spotDistance,65 ,30, Thing.minBrushSize, Thing.maxBrushSize ));
 				if( distance > Thing.maxBrushSize )
 					distance = Thing.maxBrushSize;
 				if( distance < Thing.minBrushSize )

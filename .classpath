@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/wrj4P5/library/wrj4P5.jar"/>
 	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/wrj4P5/library/WiiRemoteJ.jar"/>
 	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/wrj4P5/library/bluecove-gpl-2.1.0.jar"/>
@@ -23,5 +22,21 @@
 	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/GSVideo/library/GSVideo.jar"/>
 	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/GSVideo/library/jna.jar"/>
 	<classpathentry kind="lib" path="/home/matthew/work/processingSketches/libraries/GSVideo/library/gstreamer-java.jar"/>
+	<classpathentry kind="lib" path="/home/matthew/processing-1.2.1/libraries/opengl/library/opengl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/matthew/processing-1.2.1/libraries/opengl/library"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/matthew/processing-1.2.1/libraries/opengl/library/jogl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/matthew/processing-1.2.1/libraries/opengl/library"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/matthew/processing-1.2.1/libraries/opengl/library/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/matthew/processing-1.2.1/libraries/opengl/library"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -239,8 +239,6 @@ public class Thing
 		parent.stroke( colorPicker.getCurrentColor(), opacity );
 		if( isSpraying )
 		{
-			//parent.ellipse( xy.x, xy.y , brushSize, brushSize );
-			//parent.strokeWeight( brushSize );
 			line.addPoint(xy,colorPicker.getCurrentColor(), brushSize, opacity );
 						
 		//	 System.out.println( "spraying right now: " + xy.x+ ":" + xy.y + " bs: " + brushSize );
@@ -257,7 +255,7 @@ public class Thing
 		//draw the drips
 		if( useDrips )
 			drips.drawDrips();
-
+		
 		if( colorPicker.getWipeButton() )
 		{
 			System.out.println( "wiping background" );
