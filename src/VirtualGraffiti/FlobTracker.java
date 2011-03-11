@@ -41,8 +41,8 @@ public class FlobTracker implements CanTracker {
 		video = new GSCapture(parent, videoresw, videoresh, "/dev/video0", VirtualGraffiti.fps);  
 		flob = new Flob(videoresw, videoresh, parent.width, parent.height);
 
-		flob.setMinNumPixels( 20 );
-		flob.setMaxNumPixels( 500);
+		flob.setMinNumPixels( 50 );
+		flob.setMaxNumPixels( 150);
 		flob.setSrcImage(videotex);
 		flob.setImage(videotex);
 		flob.setBackground(video);

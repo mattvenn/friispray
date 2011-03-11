@@ -2,6 +2,7 @@ package VirtualGraffiti;
 
  interface Can
 {
+ public boolean resetSerial = false;
   void update();
   boolean isCalibrated();
   void wipeCalibration();

@@ -17,7 +17,8 @@ public class NunchuckCan implements Can {
 		System.out.println( "starting nunchuck can" );		
 		nozzleOnPressure = VirtualGraffiti.props.getIntProperty( "Nunchuck.nozzleOnPressure", 10 );
 		
-		serial = new SerialReader();
+		
+		serial = new SerialReader(this);
 	}
 	
 	@Override

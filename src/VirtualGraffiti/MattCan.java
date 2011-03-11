@@ -46,8 +46,8 @@ public class MattCan implements Can{
 	int diff;
 
 	//TODO
-    int minBrushSize = 10;
-	int maxBrushSize = 200;
+   // int minBrushSize = 10;
+//	int maxBrushSize = 200;
 	SerialReader serial;
 	
 	MattCan( PApplet parent )
@@ -55,7 +55,7 @@ public class MattCan implements Can{
 		this.parent = parent;
 		System.out.println( "starting matt can" );		
 		
-		serial = new SerialReader();
+		serial = new SerialReader(this);
 
 		nozzHist = new float[N];
 		distHist = new float[N];
@@ -93,7 +93,7 @@ public class MattCan implements Can{
 				avgNoz = movingAverage( nozzHist );
 
 				//println( "minD: " + minD + " maxD: " + maxD + " maxBrushSize: " + maxBrushSize + " minBrushSize: " + minBrushSize + " brushSize: " + brushSize );    
-				brushSize = PApplet.map( avgDist, minD, maxD, maxBrushSize, minBrushSize);
+				brushSize = PApplet.map( avgDist, maxD, minD, Thing.minBrushSize, Thing.maxBrushSize);
 
 				if( isCalibrated() == false )
 				{
@@ -159,7 +159,7 @@ public class MattCan implements Can{
 	@Override
 	public int getNozzlePressure() {
 		// TODO Auto-generated method stub
-		return (int)avgNoz;
+		return (int)(255-avgNoz);
 	}
 	public boolean isNozzlePressed()
 	{

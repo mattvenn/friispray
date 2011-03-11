@@ -13,7 +13,7 @@ public class LineDrawer {
 	int size = 20;
 	int opacity;
 	int divider = 7;
-	float iterations = 50;
+	float iterations = 70;
 	float alphaScale = (float) 0.05;
 	int color;
 	PVector oldVec, cur;

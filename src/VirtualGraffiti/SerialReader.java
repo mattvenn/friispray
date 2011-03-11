@@ -28,7 +28,8 @@ public class SerialReader implements SerialPortEventListener{
 	static InputStream in = null;
 	boolean newSerial = false;
 	String latestMessage;
-	
+	Can parent;
+
 	boolean newSerial()
 	{
 		return newSerial;
@@ -51,8 +52,9 @@ public class SerialReader implements SerialPortEventListener{
 	}
 
 
-	SerialReader()
+	SerialReader(Can parent)
 	{
+		this.parent = parent;
 		serialPortName = VirtualGraffiti.props.getStringProperty( "serialPortDev", "/dev/ttyUSB0" );
 		serialPortBaud = VirtualGraffiti.props.getIntProperty( "serialPortBaud", 19200 );
 		openSerial();
@@ -109,16 +111,20 @@ public class SerialReader implements SerialPortEventListener{
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 			//			serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
-			try
-			{
+			if( parent.resetSerial )
 				
-				System.out.println( "reset arduino..." );
-				serialPort.setDTR(false);
-				Thread.sleep( 100 );
-				serialPort.setDTR(true);
+			{
+				try
+				{
+
+					System.out.println( "reset arduino..." );
+					serialPort.setDTR(false);
+					Thread.sleep( 100 );
+					serialPort.setDTR(true);
+				}
+				catch( InterruptedException e )
+				{}
 			}
-			catch( InterruptedException e )
-			{}
 			out = serialPort.getOutputStream();
 			in = serialPort.getInputStream();
 
