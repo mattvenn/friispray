@@ -79,6 +79,7 @@ public class VirtualGraffiti extends PApplet{
 
 			w=props.getIntProperty("width",1024);
 			h=props.getIntProperty("height",768);
+			boolean fullScreen=props.getBooleanProperty("fullScreen",false);
 			
 			imagePath = props.getStringProperty( "imagePath", "./images/" ); 
 			backgroundsPath = props.getStringProperty( "backgroundsPath",sketchPath + "/data/" ); 
@@ -94,6 +95,13 @@ public class VirtualGraffiti extends PApplet{
 			size(w,h);
 			thing = new Thing( this, canType, trackerType );
 			thing.setup();
+			
+			if( fullScreen )
+			{
+			// enter fullscreen mode
+				fs = new FullScreen(this); 
+				fs.enter(); 
+			}
 
 			} catch (FileNotFoundException e) {
 				System.out.println("couldn't read config file:" + confFile + " : " + e );
@@ -123,10 +131,6 @@ public class VirtualGraffiti extends PApplet{
 		//fontA = loadFont( rootPath + "/data/Ziggurat-HTF-Black-32.vlw");
 
 		//Create the fullscreen object
-		fs = new FullScreen(this); 
-
-		// enter fullscreen mode
-		 fs.enter(); 
 		//load the sounds 
 
 		/*

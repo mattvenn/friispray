@@ -44,6 +44,7 @@ public class Thing
 		maxOpacity = VirtualGraffiti.props.getIntProperty( "brush.maxOpacity", 255 );
 		minBrushSize = VirtualGraffiti.props.getIntProperty( "brush.minBrushSize", 10 );
 		maxBrushSize = VirtualGraffiti.props.getIntProperty( "brush.maxBrushSize", 80 );
+		String lineType = VirtualGraffiti.props.getStringProperty( "lineType", "Simple" );
 
 		//defaults
 		opacity = VirtualGraffiti.props.getIntProperty( "brush.defaultOpacity", 255 );
@@ -55,8 +56,20 @@ public class Thing
 		drips = new Drips( parent, minBrushSize, maxBrushSize, minOpacity, maxOpacity);
 		colorPicker = new ColorPickerBox( parent, 5, 5, 100, 400, 12, 5 );
 		calibration = new CameraCalibration( parent );
-		line = new LineDrawer(parent);
-		//line = new BitmapDrawer(parent);
+		
+		if( lineType.contentEquals( "Simple" ))
+		{
+			line = new LineDrawer(parent);
+		}
+		else if( lineType.contentEquals( "Bitmap" ))
+		{
+			line = new BitmapDrawer(parent);
+		}
+		else
+		{
+			System.out.println( "no such linetype: '" + lineType + "'" );
+			System.exit( 1 );
+		}
 		
 		if( canType == "Laser" )
 		{
@@ -82,7 +95,6 @@ public class Thing
 		{
 			System.out.println( "no such can: '" + canType + "'" );
 			System.exit( 1 );
-
 		}
 
 		//tracker types
