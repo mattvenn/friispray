@@ -15,7 +15,7 @@ public class Thing
 	CanTracker canTracker;
 	CameraCalibration calibration;
 	ColorPickerBox colorPicker;
-	Line line;
+	LineDrawer line;
 	PVector xy;
 	
 	boolean isSpraying = false;
@@ -32,6 +32,7 @@ public class Thing
 	static int minBrushSize;
 	int brushSize;
 	int opacity;
+	int currentColor;
 
 	Thing( PApplet parent, String canType, String trackerType )
 	{
@@ -54,7 +55,8 @@ public class Thing
 		drips = new Drips( parent, minBrushSize, maxBrushSize, minOpacity, maxOpacity);
 		colorPicker = new ColorPickerBox( parent, 5, 5, 100, 400, 12, 5 );
 		calibration = new CameraCalibration( parent );
-		line = new Line(parent);
+		line = new LineDrawer(parent);
+		//line = new BitmapDrawer(parent);
 		
 		if( canType == "Laser" )
 		{
@@ -237,9 +239,14 @@ public class Thing
 		parent.noStroke();
 		parent.fill( colorPicker.getCurrentColor(), opacity );
 		parent.stroke( colorPicker.getCurrentColor(), opacity );
+		if( colorPicker.getCurrentColor() != currentColor )
+		{
+			currentColor = colorPicker.getCurrentColor();
+			line.setColor(currentColor);
+		}
 		if( isSpraying )
 		{
-			line.addPoint(xy,colorPicker.getCurrentColor(), brushSize, opacity );
+			line.addPoint(xy, brushSize, opacity );
 						
 		//	 System.out.println( "spraying right now: " + xy.x+ ":" + xy.y + " bs: " + brushSize );
 			//if( ! spray.isPlaying() ) spray.loop();

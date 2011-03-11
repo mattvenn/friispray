@@ -10,6 +10,8 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.opengl.*;
 import javax.media.opengl.GL;
+
+import fullscreen.FullScreen;
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
@@ -30,12 +32,12 @@ public class VirtualGraffiti extends PApplet{
 	//P5Properties props;
 
 
-	/*FullScreen fs; 
-	AudioSample rattle;
+	/*AudioSample rattle;
 	AudioPlayer spray;
 	Minim minim;
 	 */
 
+	FullScreen fs; 
 
 
 	//where the config file is
@@ -120,11 +122,11 @@ public class VirtualGraffiti extends PApplet{
 
 		//fontA = loadFont( rootPath + "/data/Ziggurat-HTF-Black-32.vlw");
 
-		// Create the fullscreen object
-		//	  fs = new FullScreen(this); 
+		//Create the fullscreen object
+		fs = new FullScreen(this); 
 
 		// enter fullscreen mode
-		//  fs.enter(); 
+		 fs.enter(); 
 		//load the sounds 
 
 		/*
