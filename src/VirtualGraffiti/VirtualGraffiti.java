@@ -39,7 +39,7 @@ public class VirtualGraffiti extends PApplet{
 
 	FullScreen fs; 
 
-
+	static int fps;
 	//where the config file is
 	static String confFile = "/home/matthew/work/eclipseworkspace/virtualGraffiti/config/virtualPainting.properties";
 
@@ -85,16 +85,19 @@ public class VirtualGraffiti extends PApplet{
 			backgroundsPath = props.getStringProperty( "backgroundsPath",sketchPath + "/data/" ); 
 			canType = props.getStringProperty( "canType", "Mouse" );
 			trackerType = props.getStringProperty( "trackerType","Mouse" );
+			fps = props.getIntProperty( "fps", 30 );
 
 			System.out.println( "can type:'" + canType + "'");
 			System.out.println( "tracker type:" + trackerType );
 			System.out.println( "image save path:" + imagePath );
 			System.out.println( "image load path:" + backgroundsPath );
 			
-			frameRate( 80 );
+			frameRate( fps );
 			size(w,h);
 			thing = new Thing( this, canType, trackerType );
 			thing.setup();
+			hint( PApplet.DISABLE_OPENGL_2X_SMOOTH);
+			noSmooth();
 			
 			if( fullScreen )
 			{

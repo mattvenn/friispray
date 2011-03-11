@@ -29,7 +29,6 @@ public class FlobTracker implements CanTracker {
 	PApplet parent;
 	int w,h;
 	int distance = 0;
-	int fps = 60;
 	PVector xy;
 	int videotex = 3;
 	GSCapture video;
@@ -39,7 +38,7 @@ public class FlobTracker implements CanTracker {
 
 		xy = new PVector(0,0);
 		this.parent = parent;
-		video = new GSCapture(parent, videoresw, videoresh, "/dev/video0", fps);  
+		video = new GSCapture(parent, videoresw, videoresh, "/dev/video0", VirtualGraffiti.fps);  
 		flob = new Flob(videoresw, videoresh, parent.width, parent.height);
 
 		flob.setMinNumPixels( 20 );
