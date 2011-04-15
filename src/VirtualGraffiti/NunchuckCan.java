@@ -43,8 +43,8 @@ public class NunchuckCan implements Can {
 
 	@Override
 	public int getNozzlePressure() {
-			int nozzleKnee = 150; 
-			int opacityKnee = 50; 
+			int nozzleKnee = 255; //150; 
+			int opacityKnee = 255; //50; 
 
 			int opacity;
 			if( nozzlePressure < nozzleKnee )
@@ -95,8 +95,11 @@ public class NunchuckCan implements Can {
 	
 	public void update()
 	{
+		serial.printByte('n');
 		if( serial.newSerial() )
+		{
 			updateCan( serial.getLatestMessage() );
+		}
 	}
 	
 	void updateCan(String msg)
@@ -104,20 +107,7 @@ public class NunchuckCan implements Can {
 		try
 		{
 		
-			if( msg.startsWith("Got: "))
-			{
-				
-				String []list = PApplet.split(msg, ' ' );
-
-				nozzlePressure = PApplet.unhex( list[1] );
-				button1 = PApplet.unhex( list[2] );
-
-//				System.out.println( "nozz: " + nozz + " butt: " + button ) ;
-				//println( "minD: " + minD + " maxD: " + maxD + " maxBrushSize: " + maxBrushSize + " minBrushSize: " + minBrushSize + " brushSize: " + brushSize );    
-			//	brushSize = PApplet.map( avgDist, minD, maxD, maxBrushSize, minBrushSize);
-
-			}
-			else if( msg.startsWith( "0x55 data" ))
+			if( msg.startsWith( "0x55 data" ))
 			{
 			 //do nothing
 			}
@@ -127,8 +117,23 @@ public class NunchuckCan implements Can {
 			}
 			else
 			{
+				String []list = PApplet.split(msg, ' ' );
+
+				nozzlePressure = Integer.parseInt( msg );
+//				System.out.println( "nozz: " + nozzlePressure) ;
+//				button1 = PApplet.unhex( list[2] );
+
+//				System.out.println( "nozz: " + nozz + " butt: " + button ) ;
+				//println( "minD: " + minD + " maxD: " + maxD + " maxBrushSize: " + maxBrushSize + " minBrushSize: " + minBrushSize + " brushSize: " + brushSize );    
+			//	brushSize = PApplet.map( avgDist, minD, maxD, maxBrushSize, minBrushSize);
+
+			}
+			/*
+			else
+			{
 				System.out.println( "nunchuck bad msg: " + msg );
 			}
+			*/
 			
 		}
 		catch( RuntimeException e )

@@ -41,8 +41,8 @@ public class FlobTracker implements CanTracker {
 		video = new GSCapture(parent, videoresw, videoresh, "/dev/video0", VirtualGraffiti.fps);  
 		flob = new Flob(videoresw, videoresh, parent.width, parent.height);
 
-		flob.setMinNumPixels( 50 );
-		flob.setMaxNumPixels( 150);
+		flob.setMinNumPixels( 10 );
+		flob.setMaxNumPixels( 250);
 		flob.setSrcImage(videotex);
 		flob.setImage(videotex);
 		flob.setBackground(video);
@@ -136,7 +136,7 @@ public class FlobTracker implements CanTracker {
 				if( VirtualGraffiti.debug )
 					System.out.println( "spot distance: " + spotDistance );
 				//needs calibration TODO
-				distance = (int)(PApplet.map( spotDistance,65 ,30, Thing.minBrushSize, Thing.maxBrushSize ));
+				distance = (int)(PApplet.map( spotDistance,80 ,40, Thing.minBrushSize, Thing.maxBrushSize ));
 				if( distance > Thing.maxBrushSize )
 					distance = Thing.maxBrushSize;
 				if( distance < Thing.minBrushSize )

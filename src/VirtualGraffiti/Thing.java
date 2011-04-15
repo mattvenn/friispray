@@ -14,12 +14,13 @@ public class Thing
 	Can can;
 	CanTracker canTracker;
 	CameraCalibration calibration;
+	
 	ColorPickerBox colorPicker;
 	LineDrawer line;
 	PVector xy;
 	
 	boolean isSpraying = false;
-
+	boolean nextCalibration = true;
 
 	int savedImageCount = 0;
 	Drips drips;
@@ -211,13 +212,21 @@ public class Thing
 	/* calibrations stuff
 	 * 
 	 */
+	
 	void calibrate()
 	{
 		if( canTracker.needsTransformation() && ! calibration.calibrated() )
 		{
 			//we have to do calibration
-			if( isSpraying )
+			if( isSpraying && nextCalibration )
+			{
 				calibration.addCalibrationPoint( canTracker.getXY() );
+				nextCalibration = false;
+			}
+			if( ! isSpraying )
+			{
+				nextCalibration = true;
+			}
 			calibration.drawCalibrationImage();
 		}
 	}

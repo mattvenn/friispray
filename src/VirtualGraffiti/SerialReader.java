@@ -44,6 +44,14 @@ public class SerialReader implements SerialPortEventListener{
 		try
 		{
 			latestMessage = bufferedReader.readLine();
+//			System.out.println( "bytes avail: " + in.available() );
+	//		System.out.println( "got: " + latestMessage );
+			
+			//flush any stuff we haven't had time to read
+			if( in.available() > 10 )
+			{
+				 in.skip(in.available());
+			}
 		}
 		catch (IOException e)
 		{
@@ -83,7 +91,18 @@ public class SerialReader implements SerialPortEventListener{
 			break;
 		}
 	}
-
+	public void printByte( char b )
+	{
+		try
+		{
+		out.write(b);
+		}
+		catch( IOException e )
+		{
+			//
+		}
+		
+	}
 	public void openSerial()
 	{
 		try

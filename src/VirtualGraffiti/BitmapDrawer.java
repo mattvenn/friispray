@@ -24,23 +24,18 @@ public class BitmapDrawer extends LineDrawer
 	Interpolator tracker;
 	long updateTime = 10;
 	long paintTime = 30;
-	private boolean drawOvals = false;
-	private boolean drawLines = false;
-	private boolean drawContLines = false;
-	private boolean drawBlobs = true;
 	double VEL_SCALE = 0.0003;
 	double STROKE_SIZE = 30;
 	double ALPHA_SCALE = 0.6;
 	double SIZE_SCALE = 0.4;
-	double MIN_SIZE=0.05;
 	int[] oldPos = new int[2];
 	//config for low opacity
-	int blobSizeSlow = 40;
 	double blobFadeSlow = 0.02; //power law on distance
 	double blobMultSlow = 0.1;  //multiplyer on alpha value
 	double blobMaxSlow = 0.01;  //max alpha value
 	//config for high opacity
-	int blobSizeFast = 40;
+	int blobSizeSlow = 70;
+	int blobSizeFast = 100;
 	double blobFadeFast = .7;
 	double blobMultFast = 0.2;
 	double blobMaxFast = 0.2;
@@ -106,7 +101,8 @@ public class BitmapDrawer extends LineDrawer
 	SprayBlob randBlob( double vel )
 	{
 		int index = (int) noiseP(blobs.length*vel, 0.3*blobs.length+1 );
-		index = max( 0, min( blobs.length-1, index ) );
+		//index = max( 0, min( blobs.length-1, index ) );
+		index = (int)PApplet.map( (float)vel, (float)0, (float)1, (float)0, (float)blobs.length );
 		return blobs[index];
 	}
 
