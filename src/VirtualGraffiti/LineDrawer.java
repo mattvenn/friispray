@@ -94,12 +94,12 @@ public class LineDrawer {
 	 
 	  if( mouse.size() == 1 )
 	  {
-	    // drawPoint(xy,opacity,size,color);
+	     drawPoint(xy,opacity,size,color);
 	  }
 	  if( mouse.size() == 2 )
 	  {
-	    //drawLine( mouse.get(1), mouse.get(0) );
-//	    mouse.remove( 0  );
+	    drawLine( mouse.get(1), mouse.get(0) );
+	//    mouse.remove( 0  );
 	  }
 	  if( mouse.size() > 3 )
 	  {
